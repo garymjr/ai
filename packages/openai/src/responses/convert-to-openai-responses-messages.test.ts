@@ -508,7 +508,7 @@ describe('convertToOpenAIResponsesMessages', () => {
       });
 
       describe('empty text handling', () => {
-        it('should create empty summary for initial empty text', async () => {
+        it('should skip initial empty text without creating a reasoning message', async () => {
           const result = await convertToOpenAIResponsesMessages({
             prompt: [
               {
@@ -531,19 +531,12 @@ describe('convertToOpenAIResponsesMessages', () => {
             systemMessageMode: 'system',
           });
 
-          expect(result.messages).toEqual([
-            {
-              type: 'reasoning',
-              id: 'reasoning_001',
-              encrypted_content: undefined,
-              summary: [],
-            },
-          ]);
+          expect(result.messages).toEqual([]);
 
           expect(result.warnings).toHaveLength(0);
         });
 
-        it('should create empty summary for initial empty text with encrypted content', async () => {
+        it('should skip initial empty text with encrypted content without creating a reasoning message', async () => {
           const result = await convertToOpenAIResponsesMessages({
             prompt: [
               {
@@ -567,14 +560,7 @@ describe('convertToOpenAIResponsesMessages', () => {
             systemMessageMode: 'system',
           });
 
-          expect(result.messages).toEqual([
-            {
-              type: 'reasoning',
-              id: 'reasoning_001',
-              encrypted_content: 'encrypted_content_001',
-              summary: [],
-            },
-          ]);
+          expect(result.messages).toEqual([]);
 
           expect(result.warnings).toHaveLength(0);
         });

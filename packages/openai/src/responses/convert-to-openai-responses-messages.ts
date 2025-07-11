@@ -165,14 +165,17 @@ export async function convertToOpenAIResponsesMessages({
                 }
 
                 if (existingReasoningMessage === undefined) {
-                  reasoningMessages[reasoningId] = {
-                    type: 'reasoning',
-                    id: reasoningId,
-                    encrypted_content:
-                      providerOptions?.reasoning?.encryptedContent,
-                    summary: summaryParts,
-                  };
-                  messages.push(reasoningMessages[reasoningId]);
+                  // only create a new reasoning message if there is a summary part
+                  if (summaryParts.length > 0) {
+                    reasoningMessages[reasoningId] = {
+                      type: 'reasoning',
+                      id: reasoningId,
+                      encrypted_content:
+                        providerOptions?.reasoning?.encryptedContent,
+                      summary: summaryParts,
+                    };
+                    messages.push(reasoningMessages[reasoningId]);
+                  }
                 } else {
                   existingReasoningMessage.summary.push(...summaryParts);
                 }
